@@ -145,11 +145,12 @@ def read_preprocessed_file(filepath, vocab):
     sentences = []
     sent = []
     for (val,) in struct.iter_unpack('I', buf):
+        
         if val > 0:
-            # Get words for the current sentence
+            #Get words for the current sentence
             sent.append(vocab[val-1])
         else:
-            # We've reached the end of the sentence
+            #We've reached the end of the sentence
             sentences.append(sent)
             sent = []
 
@@ -322,6 +323,30 @@ def preprocess_dataset(dataset_dir, output_dir, target_ext='.txt', num_workers=1
     del vocab
 
     # Encode preprocessed files and write them to disk
+<<<<<<< HEAD
+    for output_path, sentences in zip(output_paths, articles):
+        sentences = encode_sentences(sentences, vocab)
+        write_preprocessed_file(sentences, output_path)
+        
+
+
+def generate_input_for_glove(input_files,input_vocab, output_file):
+    """Generates input for the gloves ./demo.sh.  The output_file or the input for glove is text file of words separated by            whitespaces
+    """
+    bin_files = glob.glob(input_files)
+    
+    words =''
+    
+    for f in bin_files:
+        sentences = read_preprocessed_file(f, read_vocab(input_vocab))
+        words += ' '.join([' '.join(sent) for sent in sentences])
+                   
+    with open(output_file, "w") as outfile:
+        outfile.write(words)
+
+
+        
+=======
     # Wrap list in an iterator that removes elements in the list (thus freeing
     # the memory) as elements are yielded. This will prevent the memory usage
     # from doubling when data is copied to multiprocessing workers
@@ -337,6 +362,7 @@ def preprocess_dataset(dataset_dir, output_dir, target_ext='.txt', num_workers=1
     pool.join()
 
     LOGGER.info("Done.")
+>>>>>>> 5dc75c15e0773f61d245fc975598a331532828bd
 
 
 def generate_input_for_glove(input_files,input_vocab, output_file):
